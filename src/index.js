@@ -17,10 +17,20 @@ class Tempus extends Date {
     return Tempus.dayStart(this)
   }
 
+  /**
+   * Get the end of day
+   *
+   * @return {Date} End of day
+   */
   get dayEnd() {
     return Tempus.dayEnd(this)
   }
 
+  /**
+   * Get day of week
+   *
+   * @returns {Number} Day of week (zero index)
+   */
   get dayOfWeek() {
     return Tempus.dayOfWeek(this)
   }
