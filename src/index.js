@@ -1,6 +1,7 @@
 class Tempus extends Date {
-  constructor(...args) {
-    super(args)
+  constructor() {
+    // eslint-disable-next-line prefer-rest-params
+    super(...arguments)
     this.timeZone = 'UTC'
     this.locale = 'en-US'
   }
@@ -80,12 +81,20 @@ class Tempus extends Date {
   }
 
   /**
+   * Set the locale
+   *
 	 * @param {string} locale Valid locale (e.g. 'en-US')
 	 */
   setLocale(locale) {
     this.locale = locale
   }
 
+  /**
+   * Convert to SQL formatted string
+   * @param {*} timeZone
+   * @param {*} format
+   * @returns
+   */
   toSQLString(timeZone = 'UTC', format = 'DATETIME') {
     // eslint-disable-next-line unicorn/no-this-assignment
     const nd = this
@@ -219,10 +228,19 @@ class Tempus extends Date {
       this.hours = result
     }
 
+    /**
+     * Override toString()
+     * @returns {String} time formatted offset
+     */
     toString() {
-      return Tempus.decimalToTime(this, false)
+      return Tempus.decimalToTime(this.hours, false)
     }
 
+    /**
+     * Convert to primitive
+     * @param {string} hint Type hint
+     * @returns {Number|String} Converted type of offset hours
+     */
     [Symbol.toPrimitive](hint) {
       if (hint === 'number') {
         return this.hours
