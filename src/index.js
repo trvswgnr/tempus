@@ -9,10 +9,10 @@ class Tempus extends Date {
   // public
 
   /**
-	 * Get the start of the day
-	 *
-	 * @return {Date} Start of day
-	 */
+   * Get the start of the day
+   *
+   * @return {Tempus} Start of day
+   */
   get dayStart() {
     return Tempus.dayStart(this)
   }
@@ -20,7 +20,7 @@ class Tempus extends Date {
   /**
    * Get the end of day
    *
-   * @return {Date} End of day
+   * @return {Tempus} End of day
    */
   get dayEnd() {
     return Tempus.dayEnd(this)
@@ -36,22 +36,22 @@ class Tempus extends Date {
   }
 
   /**
-	 * Get time zone offset
-	 *
-	 * @example
-	 * // returns -4
-	 * this.timeZoneOffset.hours;
-	 *
-	 * @example
-	 * // returns -4
-	 * Number(this.timeZoneOffset);
-	 *
-	 * @example
-	 * // returns '-04:00'
-	 * String(this.timeZoneOffset);
-	 *
-	 * @returns {Tempus.TimeZoneOffset} timezne off
-	 */
+   * Get time zone offset
+   *
+   * @example
+   * // returns -4
+   * this.timeZoneOffset.hours;
+   *
+   * @example
+   * // returns -4
+   * Number(this.timeZoneOffset);
+   *
+   * @example
+   * // returns '-04:00'
+   * String(this.timeZoneOffset);
+   *
+   * @return {Tempus.TimeZoneOffset} timezone offset
+   */
   get timeZoneOffset() {
     return new Tempus.TimeZoneOffset(this.timeZone, this)
   }
@@ -81,8 +81,8 @@ class Tempus extends Date {
   }
 
   /**
-	 * @param {string} tz timeZone Valid time zone (e.g. 'UTC' or 'America/Los_Angeles')
-	 */
+   * @param {string} tz timeZone Valid time zone (e.g. 'UTC' or 'America/Los_Angeles')
+   */
   setTimeZone(tz) {
     const oldOffset = Number(this.timeZoneOffset)
     this.timeZone = tz
@@ -93,16 +93,16 @@ class Tempus extends Date {
   /**
    * Set the locale
    *
-	 * @param {string} locale Valid locale (e.g. 'en-US')
-	 */
+   * @param {string} locale Valid locale (e.g. 'en-US')
+   */
   setLocale(locale) {
     this.locale = locale
   }
 
   /**
    * Convert to SQL formatted string
-   * @param {*} timeZone
-   * @param {*} format
+   * @param {string} timeZone
+   * @param {string} format
    * @returns
    */
   toSQLString(timeZone = 'UTC', format = 'DATETIME') {
@@ -126,18 +126,18 @@ class Tempus extends Date {
   static dayStart = date => {
     const newDate = date
     newDate.setUTCHours(0, 0, 0, 0)
-    return new Date(newDate)
+    return new Tempus(newDate)
   }
 
   static dayEnd = date => {
     const newDate = date
     newDate.setUTCHours(23, 59, 59, 999)
-    return new Date(newDate)
+    return new Tempus(newDate)
   }
 
   static dayOfWeek = (date, startMonday = true) => startMonday ? (date.getDay() === 0 ? 6 : date.getDay() - 1) : date.getDay()
 
-  static getDateChangedByDays = (days, initialDate) => new Date(new Date(initialDate).getTime() + (days * 86_400_000))
+  static getDateChangedByDays = (days, initialDate) => new Tempus(new Date(initialDate).getTime() + (days * 86_400_000))
 
   static adjustByDays = (days, initialDate) => initialDate.setDate(initialDate.getDate() + days)
 
@@ -176,13 +176,13 @@ class Tempus extends Date {
   }
 
   /**
-	 * Format in SQL entry style
-	 *
-	 * @param {Date} date JavaScript Date
-	 * @param {string|false} timeZone Valid timezone (e.g. 'America/Los_Angeles'), or false for default system timezone
-	 * @param {'DATE'|'DATETIME'|'TIMESTAMP'|'YEAR'} format SQL column type
-	 * @returns
-	 */
+   * Format in SQL entry style
+   *
+   * @param {Date} date JavaScript Date
+   * @param {string|false} timeZone Valid timezone (e.g. 'America/Los_Angeles'), or false for default system timezone
+   * @param {'DATE'|'DATETIME'|'TIMESTAMP'|'YEAR'} format SQL column type
+   * @returns
+   */
   static toSQLString = (date, format = 'DATETIME') => {
     format = format.toLowerCase()
     const formatted = date.toISOString()
@@ -202,7 +202,7 @@ class Tempus extends Date {
     const date = new Date(_date)
     const day = date.getDay()
     const diff = date.getDate() - day + (day === 0 ? -6 : 1) // adjust when day is sunday
-    const newDate = new Date(date.setDate(diff))
+    const newDate = new Tempus(date.setDate(diff))
     newDate.setUTCHours(0, 0, 0, 0)
     return newDate
   }
@@ -223,10 +223,10 @@ class Tempus extends Date {
   }
 
   /**
-	 * Get time zone offset
-	 *
-	 * @description Cast as primitive to get desired result
-	 */
+   * Get time zone offset
+   *
+   * @description Cast as primitive to get desired result
+   */
   static TimeZoneOffset = class {
     constructor(timeZone, date = new Date()) {
       const tz = date.toLocaleString('en', { timeZone, timeStyle: 'long' }).split(' ').slice(-1)[0]
