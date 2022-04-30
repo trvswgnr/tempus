@@ -3,7 +3,7 @@ class Tempus extends Date {
     // eslint-disable-next-line prefer-rest-params
     super((new Date(...arguments)).toUTCString())
     this.timeZone = window.timeZone || 'UTC'
-    this.locale = 'en-US'
+    this.locale = window.locale || 'en-US'
   }
 
   // public
