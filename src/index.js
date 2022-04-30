@@ -1,8 +1,8 @@
 class Tempus extends Date {
   constructor() {
     // eslint-disable-next-line prefer-rest-params
-    super(...arguments)
-    this.timeZone = 'UTC'
+    super((new Date(...arguments)).toUTCString())
+    this.timeZone = window.timeZone || 'UTC'
     this.locale = 'en-US'
   }
 
